@@ -1,22 +1,14 @@
-#version 430
+#version 400 core
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
-layout(location = 2) in vec3 texcoord;
+in vec3 position;
+in vec2 textureCoords;
+out vec2 pass_textureCoords;
 
-out vec3 o_position;
-out vec3 o_normal;
-out vec2 o_texcoord;
-	
-uniform mat4 world;
-uniform mat4 viewProj;
-uniform mat3 normalMatrix;
-	
-void main()
-{
-	o_position = vec3(world * vec4(position, 1.0f));
-    o_normal   = normalMatrix * normal;
-    o_texcoord = texcoord.xy;
-	
-    gl_Position = viewProj * world * vec4(position, 1.0f);
+uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+
+void main(){
+    gl_Position=projectionMatrix*viewMatrix*transformationMatrix*vec4(position,1.0);
+    pass_textureCoords=textureCoords;
 }

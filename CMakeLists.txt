@@ -40,7 +40,16 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/models/Model.h
         src/shaders/ShaderProgram.cpp
         src/shaders/ShaderProgram.h
-		src/shaders/ShaderProgram.h)
+		src/shaders/ShaderProgram.h
+		src/shaders/StaticShader.cpp
+		src/shaders/StaticShader.h
+		src/shaders/StaticShader.h
+		src/entities/Camera.cpp
+		src/entities/Camera.h
+		src/entities/Camera.h
+		src/entities/Entity.cpp
+		src/entities/Entity.h
+		src/entities/Entity.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
