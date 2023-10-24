@@ -9,6 +9,7 @@ namespace starlight{
         unsigned int vaoId;
         unsigned int vertexCount;
     public:
+        RawModel();
         RawModel(unsigned int vaoId,unsigned int vertexCount);
         int getVaoId() const;
         int getVertexCount() const;

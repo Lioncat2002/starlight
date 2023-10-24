@@ -16,5 +16,9 @@ namespace starlight{
     int RawModel::getVertexCount() const {
         return this->vertexCount;
     }
+
+    RawModel::RawModel() {
+
+    }
 }
 
