@@ -4,7 +4,7 @@
 
 #include "RawModel.h"
 namespace starlight{
-    RawModel::RawModel(int vaoId, int vertexCount) {
+    RawModel::RawModel(unsigned int vaoId,unsigned int vertexCount) {
         this->vaoId=vaoId;
         this->vertexCount=vertexCount;
     }

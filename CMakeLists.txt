@@ -28,7 +28,14 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/models/RawModel.h
 		src/renderer/Loader.cpp
 		src/renderer/Loader.h
-        src/renderer/Loader.h)
+        src/renderer/Loader.h
+		src/renderer/Renderer.cpp
+		src/renderer/Renderer.h
+		src/renderer/Renderer.h
+		src/utils/Math.cpp
+		src/utils/Math.h
+		src/textures/Texture.cpp
+		src/textures/Texture.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

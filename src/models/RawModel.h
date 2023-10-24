@@ -6,10 +6,10 @@
 namespace starlight{
     class RawModel {
     private:
-        int vaoId;
-        int vertexCount;
+        unsigned int vaoId;
+        unsigned int vertexCount;
     public:
-        RawModel(int vaoId,int vertexCount);
+        RawModel(unsigned int vaoId,unsigned int vertexCount);
         int getVaoId() const;
         int getVertexCount() const;
     };
