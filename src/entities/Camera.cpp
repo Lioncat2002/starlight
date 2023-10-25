@@ -40,4 +40,10 @@ namespace starlight {
             position.z+=0.02f;
         }
     }
+
+    Camera::Camera(glm::vec3 position, float yaw, float pitch) {
+        this->position=position;
+        this->yaw=yaw;
+        this->pitch=pitch;
+    }
 } // starlight

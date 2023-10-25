@@ -4,6 +4,8 @@
 
 #include "StaticShader.h"
 #include "detail/type_mat4x4.hpp"
+#include "entities/Camera.h"
+#include "utils/Math.h"
 
 #include <utility>
 
@@ -35,7 +37,13 @@ namespace starlight {
         ShaderProgram::loadMatrix(location_projectionMatrix,matrix);
     }
 
-    void StaticShader::loadViewMatrix() {
+    void StaticShader::loadViewMatrix(Camera &camera) {
+        glm::mat4 viewMatrix=Math::createViewMatrix(camera);
+        ShaderProgram::loadMatrix(location_viewMatrix,viewMatrix);
+
+    }
+
+    StaticShader::StaticShader() {
 
     }
 } // starlight

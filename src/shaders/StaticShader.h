@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ShaderProgram.h"
+#include "entities/Camera.h"
 
 namespace starlight {
 
@@ -19,8 +20,10 @@ namespace starlight {
         void getAllUniformLocations() override;
         StaticShader(std::string VERTEX_FILE,std::string FRAGMENT_FILE);
         void loadTransformationMatrix(glm::mat4 matrix);
-        void loadViewMatrix();
+        void loadViewMatrix(Camera &camera);
         void loadProjectionMatrix(glm::mat4 matrix);
+
+        StaticShader();
     };
 
 } // starlight

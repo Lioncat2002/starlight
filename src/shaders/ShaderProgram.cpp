@@ -99,4 +99,8 @@ namespace starlight {
     void ShaderProgram::loadMatrix(int location, glm::mat4 matrix) {
         glUniformMatrix4fv(location,1,false,glm::value_ptr(matrix));
     }
+
+    ShaderProgram::ShaderProgram() {
+
+    }
 } // starlight

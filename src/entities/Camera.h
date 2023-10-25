@@ -16,6 +16,7 @@ namespace starlight {
         float roll;
     public:
         Camera();
+        Camera(glm::vec3 position,float yaw,float pitch);
         glm::vec3 getPosition();
         float getPitch();
         float getYaw();

@@ -18,6 +18,9 @@ namespace starlight {
 
         void init();
         void draw(Entity &entity,StaticShader &shader);
+
+        Renderer();
+
     private:
         void createProjectionMatrix();
     };

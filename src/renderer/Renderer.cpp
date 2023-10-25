@@ -44,4 +44,8 @@ namespace starlight {
         float aspectRatio=1024.0f/768.0f;
         projectionMatrix=glm::perspective(glm::radians(FOV),aspectRatio,NEAR_PLANE,FAR_PLANE);
     }
+
+    Renderer::Renderer() {
+
+    }
 } // starlight

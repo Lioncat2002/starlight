@@ -51,4 +51,8 @@ namespace starlight {
     void Entity::setScale(glm::vec3 scale) {
         this->scale=scale;
     }
+
+    Entity::Entity() {
+
+    }
 } // starlight
