@@ -28,16 +28,16 @@ namespace starlight {
 
     void Camera::move(int key) {
         if(key==GLFW_KEY_W){
-            position.z-=0.02f;
+            position.z-=0.2f;
         }
         if(key==GLFW_KEY_S){
-            position.x+=0.02f;
+            position.z+=0.2f;
         }
         if(key==GLFW_KEY_A){
-            position.x-=0.02f;
+            position.x-=0.2f;
         }
         if(key==GLFW_KEY_D){
-            position.z+=0.02f;
+            position.x+=0.2f;
         }
     }
 

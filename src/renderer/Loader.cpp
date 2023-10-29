@@ -6,6 +6,10 @@
 #include "Loader.h"
 #include "glad.h"
 #include "stb_image.h"
+#include "assimp/mesh.h"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
+#include "assimp/Importer.hpp"
 
 namespace starlight {
     unsigned int Loader::createVao() {
@@ -50,7 +54,9 @@ namespace starlight {
         int width,height,nrChannels;
         unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
         if (data) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            //CHANGE to GL_RGB incase the game crashes
+            //IF colors are wrong change to GL_RGBA
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         else {
@@ -81,5 +87,57 @@ namespace starlight {
         for(auto texture:textures){
             glDeleteTextures(1,&texture);
         }
+    }
+
+    void Loader::LoadModel(std::string &path,std::vector<float> &vertices,std::vector<float> &textures,std::vector<float> &normals,std::vector<int> &indices){
+        Assimp::Importer importer;
+        const aiScene *scene=importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs);
+        if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
+            std::cout<<"ERROR: Assimp failed to load OBJ model: "<<importer.GetErrorString()<<std::endl;
+            return;
+        }
+
+        const aiMesh *mesh=scene->mMeshes[0];
+
+        for(unsigned int i=0;i<mesh->mNumVertices;i++){
+            vertices.push_back(mesh->mVertices[i].x);
+            vertices.push_back(mesh->mVertices[i].y);
+            vertices.push_back(mesh->mVertices[i].z);
+
+            if(mesh->HasTextureCoords(0)){
+                textures.push_back(mesh->mTextureCoords[0][i].x);
+                textures.push_back(mesh->mTextureCoords[0][i].y);
+            }else {
+                textures.push_back(0.0f);
+                textures.push_back(0.0f);
+            }
+
+            if(mesh->HasNormals()){
+                normals.push_back(mesh->mNormals[i].x);
+                normals.push_back(mesh->mNormals[i].y);
+                normals.push_back(mesh->mNormals[i].z);
+            }else{
+                normals.push_back(0.0f);
+                normals.push_back(0.0f);
+                normals.push_back(0.0f);
+            }
+        }
+
+        for(unsigned int i=0;i<mesh->mNumFaces;i++){
+            const aiFace &face=mesh->mFaces[i];
+            for(unsigned int j=0;j<face.mNumIndices;j++){
+                indices.push_back(face.mIndices[j]);
+            }
+        }
+    }
+
+    RawModel Loader::loadModelFromFile(std::string path) {
+        std::vector<float> vertices;
+        std::vector<float> textures;
+        std::vector<float> normals;
+        std::vector<int> indices;
+
+        LoadModel(path,vertices,textures,normals,indices);
+        return loadToVao(vertices,indices,textures);
     }
 } // starlight
