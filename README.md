@@ -1,6 +1,6 @@
-# OpenGLSampleCmake
+# Starlight
 
-A sample CMake for OpenGL based projects.
+A 3D game engine
 
 For more information about how all of these was done please refer to this [link](https://shot511.github.io/2018-05-29-how-to-setup-opengl-project-with-cmake/).
 
