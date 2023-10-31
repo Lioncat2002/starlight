@@ -29,7 +29,7 @@ Install the following dependencies
 ```
   mkdir build
   cd build
-  cmake -A Win32 ..
+  cmake -A x64 ..
 ```
 
 **Note:** The project must be configured as Win32, due to precompiled x86 binaries of thirdparty libraries.
