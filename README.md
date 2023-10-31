@@ -12,7 +12,7 @@ https://github.com/Lioncat2002/starlight/assets/74904820/3aa02d17-6231-4056-8e3a
 
 
 
-## Building on Win32
+## Building on Win64
 
 ### Prerequisites
 
