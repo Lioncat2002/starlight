@@ -66,13 +66,13 @@ int init(){
 
 int load(){
     loader=starlight::Loader();
-    std::string path="res/models/small_deserthouse.obj";
+    std::string path="res/models/another_tree.obj";
     model=loader.loadModelFromFile(path);
-    texture=starlight::Texture(loader.loadTexture("res/models/small_deserthouse.png"));
+    texture=starlight::Texture(loader.loadTexture("res/models/another_tree.png"));
     texturedModel=starlight::Model(model,texture);
 
     entity=starlight::Entity(texturedModel, {0,0,-10},{0,0,0},{1.0f,1.0f,1.0f});
-    camera=starlight::Camera({0,0,0},0.0f,0.0f);
+    camera=starlight::Camera({0,2,10},0.0f,0.0f);
 
     shader= static_cast<const std::shared_ptr<starlight::StaticShader>>(new starlight::StaticShader(VERTEX_FILE,
                                                                                                     FRAGMENT_FILE));

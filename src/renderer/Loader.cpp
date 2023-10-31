@@ -74,7 +74,7 @@ namespace starlight {
         storeDataInAttributeList(3,0,positions);
         storeDataInAttributeList(2,1,textureCoords);
         unbindVao();
-        return {vaoId,indices.size()};
+        return {vaoId,static_cast<unsigned int>(indices.size())};
     }
 
     Loader::~Loader() {
