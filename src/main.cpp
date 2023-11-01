@@ -5,6 +5,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <reactphysics3d/reactphysics3d.h>
+reactphysics3d::PhysicsCommon *physics;
 GLFWwindow *window;
 
 const int WINDOW_WIDTH=1024;

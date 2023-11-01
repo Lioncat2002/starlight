@@ -80,8 +80,11 @@ add_library(STB_IMAGE "thirdparty/stb_image.cpp")
 # GLAD
 add_library(GLAD "thirdparty/glad.c")
 
+# ReactPhysics3D
+find_package(RP3D REQUIRED)
+message(STATUS "Found ReactPhysics in ${RP3D_INCLUDE_DIR}")
 # Put all libraries into a variable
-set(LIBS ${GLFW3_LIBRARY} ${OPENGL_LIBRARY} GLAD ${CMAKE_DL_LIBS} ${ASSIMP_LIBRARY} STB_IMAGE)
+set(LIBS ${GLFW3_LIBRARY} ${OPENGL_LIBRARY} GLAD ${CMAKE_DL_LIBS} ${ASSIMP_LIBRARY} ${RP3D_LIBRARY} STB_IMAGE)
 
 # Define the include DIRs
 include_directories(
