@@ -49,7 +49,10 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/entities/Camera.h
 		src/entities/Entity.cpp
 		src/entities/Entity.h
-		src/entities/Entity.h)
+		src/entities/Entity.h
+		src/entities/Lighting.cpp
+		src/entities/Lighting.h
+		src/entities/Lighting.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

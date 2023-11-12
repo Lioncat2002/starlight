@@ -6,3 +6,4 @@
 #include "textures/Texture.h"
 #include "models/Model.h"
 #include "entities/Entity.h"
+#include "entities/Lighting.h"

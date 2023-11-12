@@ -2,12 +2,10 @@
 #include "glad.h"
 #include "GLFW/glfw3.h"
 #include "starlight.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <reactphysics3d/reactphysics3d.h>
-reactphysics3d::PhysicsCommon *physics;
 GLFWwindow *window;
+
+reactphysics3d::PhysicsCommon physics;
 
 const int WINDOW_WIDTH=1024;
 const int WINDOW_HEIGHT=768;
@@ -16,14 +14,16 @@ starlight::Loader loader;
 starlight::Renderer renderer;
 std::shared_ptr<starlight::StaticShader> shader;
 
+starlight::Light light;
+
 const std::string VERTEX_FILE="res/shaders/Basic.vert";
 const std::string FRAGMENT_FILE="res/shaders/Basic.frag";
 
-starlight::RawModel model;
-starlight::Texture texture;
-starlight::Model texturedModel;
-starlight::Entity entity;
 starlight::Camera camera;
+
+starlight::Entity level;
+starlight::Entity car1;
+
 
 void key_callback(GLFWwindow* window1, int key, int scancode, int action, int mods)
 {
@@ -31,6 +31,7 @@ void key_callback(GLFWwindow* window1, int key, int scancode, int action, int mo
         glfwSetWindowShouldClose(window1,true);
     //if (action == GLFW_PRESS)
     camera.move(key);
+    
 }
 
 int init(){
@@ -68,13 +69,14 @@ int init(){
 
 int load(){
     loader=starlight::Loader();
-    std::string path="res/models/another_tree.obj";
-    model=loader.loadModelFromFile(path);
-    texture=starlight::Texture(loader.loadTexture("res/models/another_tree.png"));
-    texturedModel=starlight::Model(model,texture);
+    camera=starlight::Camera({-1,4,-3},-20.0f,-45.0f);
 
-    entity=starlight::Entity(texturedModel, {0,0,-10},{0,0,0},{1.0f,1.0f,1.0f});
-    camera=starlight::Camera({0,2,10},0.0f,0.0f);
+    light=starlight::Light({-2,4,-3},{1,1,1});
+
+    auto groundRawModel=loader.loadModelFromFile("res/models/levels/level1.obj");
+    auto texture=starlight::Texture(loader.loadTexture("res/texture.png"));
+    auto groundModel=starlight::Model(groundRawModel,texture);
+    level=starlight::Entity(groundModel, {0,0,-5},{0,0,0},{1.0f,1.0f,1.0f});
 
     shader= static_cast<const std::shared_ptr<starlight::StaticShader>>(new starlight::StaticShader(VERTEX_FILE,
                                                                                                     FRAGMENT_FILE));
@@ -85,13 +87,15 @@ int render(){
     renderer.init();
     shader->start();
     shader->loadViewMatrix(camera);
-    renderer.draw(entity,*shader);
+    shader->loadLight(light);
+    renderer.draw(level,*shader);
+    //renderer.draw(car1,*shader);
     shader->stop();
     return true;
 }
 int update(){
     while(!glfwWindowShouldClose(window)){
-        entity.increaseRotation({0,0.02,0});
+        //ground.increaseRotation({0,0.02,0});
         render();
 
         glfwPollEvents();

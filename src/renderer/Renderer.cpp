@@ -30,11 +30,13 @@ namespace starlight {
         glBindVertexArray(rawModel.getVaoId());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         glm::mat4 transformationMatrix=Math::createTransformationMatrix(entity.getPosition(),entity.getRotation(),entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,model.getTexture().getId());
         glDrawElements(GL_TRIANGLES,rawModel.getVertexCount(),GL_UNSIGNED_INT,nullptr);
+        glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);

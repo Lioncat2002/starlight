@@ -19,6 +19,7 @@ namespace starlight {
     void StaticShader::bindAttributes() {
         bindAttribute(0,"position");
         bindAttribute(1,"textureCoords");
+        bindAttribute(2,"normal");
         ShaderProgram::bindAttributes();
     }
 
@@ -26,7 +27,14 @@ namespace starlight {
         location_transformationMatrix=ShaderProgram::getUniformLocation("transformationMatrix");
         location_projectionMatrix=ShaderProgram::getUniformLocation("projectionMatrix");
         location_viewMatrix=ShaderProgram::getUniformLocation("viewMatrix");
+        location_lightPosition=ShaderProgram::getUniformLocation("lightPosition");
+        location_lightColor=ShaderProgram::getUniformLocation("lightColor");
         ShaderProgram::getAllUniformLocations();
+    }
+
+    void StaticShader::loadLight(starlight::Light light) {
+        ShaderProgram::loadVector(location_lightPosition,light.getPosition());
+        ShaderProgram::loadVector(location_lightColor,light.getColor());
     }
 
     void StaticShader::loadTransformationMatrix(glm::mat4 matrix) {

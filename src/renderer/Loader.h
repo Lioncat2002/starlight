@@ -12,7 +12,7 @@ namespace starlight {
         std::vector<unsigned int> textures;
     public:
         unsigned int loadTexture(std::string filename);
-        RawModel loadToVao(std::vector<float> positions,std::vector<int> indices,std::vector<float> textureCoords);
+        RawModel loadToVao(std::vector<float> positions,std::vector<int> indices,std::vector<float> textureCoords,std::vector<float> normals);
         RawModel loadModelFromFile(std::string path);
         ~Loader();
     private:

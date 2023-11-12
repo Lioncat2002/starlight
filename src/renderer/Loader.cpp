@@ -68,11 +68,12 @@ namespace starlight {
         return textureId;
     }
 
-    RawModel Loader::loadToVao(std::vector<float> positions, std::vector<int> indices, std::vector<float> textureCoords) {
+    RawModel Loader::loadToVao(std::vector<float> positions, std::vector<int> indices, std::vector<float> textureCoords,std::vector<float> normals) {
         unsigned int vaoId=createVao();
         bindIndicesBuffer(indices);
         storeDataInAttributeList(3,0,positions);
         storeDataInAttributeList(2,1,textureCoords);
+        storeDataInAttributeList(3,2,normals);
         unbindVao();
         return {vaoId,static_cast<unsigned int>(indices.size())};
     }
@@ -97,38 +98,42 @@ namespace starlight {
             return;
         }
 
-        const aiMesh *mesh=scene->mMeshes[0];
 
-        for(unsigned int i=0;i<mesh->mNumVertices;i++){
-            vertices.push_back(mesh->mVertices[i].x);
-            vertices.push_back(mesh->mVertices[i].y);
-            vertices.push_back(mesh->mVertices[i].z);
+        for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
+            const aiMesh* mesh = scene->mMeshes[j];
 
-            if(mesh->HasTextureCoords(0)){
-                textures.push_back(mesh->mTextureCoords[0][i].x);
-                textures.push_back(mesh->mTextureCoords[0][i].y);
-            }else {
-                textures.push_back(0.0f);
-                textures.push_back(0.0f);
+            for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+                vertices.push_back(mesh->mVertices[i].x);
+                vertices.push_back(mesh->mVertices[i].y);
+                vertices.push_back(mesh->mVertices[i].z);
+
+                if (mesh->HasTextureCoords(0)) {
+                    textures.push_back(mesh->mTextureCoords[0][i].x);
+                    textures.push_back(mesh->mTextureCoords[0][i].y);
+                } else {
+                    textures.push_back(0.0f);
+                    textures.push_back(0.0f);
+                }
+
+                if (mesh->HasNormals()) {
+                    normals.push_back(mesh->mNormals[i].x);
+                    normals.push_back(mesh->mNormals[i].y);
+                    normals.push_back(mesh->mNormals[i].z);
+                } else {
+                    normals.push_back(0.0f);
+                    normals.push_back(0.0f);
+                    normals.push_back(0.0f);
+                }
             }
 
-            if(mesh->HasNormals()){
-                normals.push_back(mesh->mNormals[i].x);
-                normals.push_back(mesh->mNormals[i].y);
-                normals.push_back(mesh->mNormals[i].z);
-            }else{
-                normals.push_back(0.0f);
-                normals.push_back(0.0f);
-                normals.push_back(0.0f);
+            for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+                const aiFace &face = mesh->mFaces[i];
+                for (unsigned int k = 0; k < face.mNumIndices; k++) {
+                    indices.push_back(face.mIndices[k]);
+                }
             }
         }
 
-        for(unsigned int i=0;i<mesh->mNumFaces;i++){
-            const aiFace &face=mesh->mFaces[i];
-            for(unsigned int j=0;j<face.mNumIndices;j++){
-                indices.push_back(face.mIndices[j]);
-            }
-        }
     }
 
     RawModel Loader::loadModelFromFile(std::string path) {
@@ -138,6 +143,6 @@ namespace starlight {
         std::vector<int> indices;
 
         LoadModel(path,vertices,textures,normals,indices);
-        return loadToVao(vertices,indices,textures);
+        return loadToVao(vertices,indices,textures,normals);
     }
 } // starlight
