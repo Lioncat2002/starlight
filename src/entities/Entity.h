@@ -13,10 +13,10 @@ namespace starlight {
     class Entity {
     private:
         Model model;
+    public:
         glm::vec3 position{};
         glm::vec3 rotation{};
         glm::vec3 scale;
-    public:
         std::string tag;
         Entity(Model &model,glm::vec3 position,glm::vec3 rotation, glm::vec3 scale,std::string tag);
         void increasePosition(glm::vec3 position);
@@ -27,11 +27,13 @@ namespace starlight {
         glm::vec3 getPosition();
         glm::vec3 getRotation();
         glm::vec3 getScale();
+        std::string getTag();
         //setters
         void setModel(Model &model);
         void setPosition(glm::vec3 position);
         void setRotation(glm::vec3 rotation);
         void setScale(glm::vec3 scale);
+        void setTag(std::string tag);
 
         Entity();
     };

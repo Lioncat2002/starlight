@@ -54,7 +54,13 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		imgui/backends/imgui_impl_glfw.cpp
 		imgui/backends/imgui_impl_glfw.h
 		imgui/backends/imgui_impl_opengl3.cpp
-		imgui/backends/imgui_impl_opengl3.h)
+		imgui/backends/imgui_impl_opengl3.h
+        src/editor/Editor.cpp
+        src/editor/Editor.h
+		src/utils/AssetServer.cpp
+		src/utils/AssetServer.h
+        src/utils/ECS.cpp
+        src/utils/ECS.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

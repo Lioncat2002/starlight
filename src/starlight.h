@@ -8,6 +8,9 @@
 #include "entities/Entity.h"
 #include "entities/Lighting.h"
 #include "utils/LogUtils.h"
+#include "utils/AssetServer.h"
+#include "editor/Editor.h"
+#include "utils/ECS.h"
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 #define GLM_ENABLE_EXPERIMENTAL

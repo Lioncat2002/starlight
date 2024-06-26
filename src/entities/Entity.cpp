@@ -37,6 +37,10 @@ namespace starlight {
         return this->scale;
     }
 
+    std::string Entity::getTag() {
+        return this->tag;
+    }
+
     void Entity::setModel(Model &model) {
         this->model=model;
     }
@@ -53,7 +57,12 @@ namespace starlight {
         this->scale=scale;
     }
 
+    void Entity::setTag(std::string tag) {
+        this->tag=std::move(tag);
+    }
+
     Entity::Entity() {
 
     }
+
 } // starlight

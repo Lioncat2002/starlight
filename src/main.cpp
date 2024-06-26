@@ -6,6 +6,9 @@ GLFWwindow *window;
 const int WINDOW_WIDTH=1024;
 const int WINDOW_HEIGHT=768;
 
+starlight::Editor editor;
+
+
 starlight::Loader loader;
 starlight::Renderer renderer;
 std::shared_ptr<starlight::StaticShader> shader;
@@ -25,7 +28,6 @@ starlight::Entity player_small_tower2;
 starlight::Entity enemy_small_tower1;
 starlight::Entity enemy_small_tower2;
 
-std::vector<starlight::Entity> entities;
 
 void key_callback(GLFWwindow* window1, int key, int scancode, int action, int mods)
 {
@@ -79,17 +81,7 @@ int init(){
     glEnable(GL_DEPTH_TEST);
     glfwSetKeyCallback(window,key_callback);
 
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-
-// Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
+    editor.init(window);
     return true;
 }
 
@@ -99,27 +91,38 @@ int load(){
 
     light=starlight::Light({-2,4,-3},{1,1,1});
 
-    auto groundRawModel=loader.loadModelFromFile("res/models/clash_royale_base_level.obj");
-    auto texture=starlight::Texture(loader.loadTexture("res/models/clash_royale_base_level.png"));
-    auto groundModel=starlight::Model(groundRawModel,texture);
 
-    base_level=starlight::Entity(groundModel, {0,0,-5},{0,0,0},{2.0f,2.0f,2.0f},"ground");
+    base_level=starlight::AssetServer::AssetLoader(loader,
+                                                   "res/models/clash_royale_base_level.obj",
+                                                   "res/models/clash_royale_base_level.png");
 
-    auto smallTowerRawModel=loader.loadModelFromFile("res/models/clash_royale_small_tower.obj");
-    texture=starlight::Texture(loader.loadTexture("res/models/clash_royale_small_tower.png"));
-    auto smallTowerModel=starlight::Model(smallTowerRawModel,texture);
+    base_level.setPosition({0,0,-5});
+    base_level.setScale({2,2,2});
+    base_level.setTag("ground");
 
-    player_small_tower1=starlight::Entity(smallTowerModel,{2,0,1},{0,0,0},{1.0f,1.0f,1.0f},"tower");
-    player_small_tower2=starlight::Entity(smallTowerModel,{-2,0,1},{0,0,0},{1.0f,1.0f,1.0f},"tower");
+    player_small_tower1=starlight::AssetServer::AssetLoader(loader,
+                                                            "res/models/clash_royale_small_tower.obj",
+                                                            "res/models/clash_royale_small_tower.png");
+    player_small_tower1.setPosition({2,0,1});
+    player_small_tower1.setTag("player_tower");
 
-    enemy_small_tower1=starlight::Entity(smallTowerModel,{2,0,-9},{0,0,0},{1.0f,1.0f,1.0f},"enemy_tower");
-    enemy_small_tower2=starlight::Entity(smallTowerModel,{-2,0,-9},{0,0,0},{1.0f,1.0f,1.0f},"enemy_tower");
+    player_small_tower2=player_small_tower1;
+    player_small_tower2.setPosition({-2,0,1});
+    player_small_tower2.setTag("player_tower");
 
-    entities.push_back(player_small_tower1);
-    entities.push_back(player_small_tower2);
-    entities.push_back(enemy_small_tower1);
-    entities.push_back(enemy_small_tower2);
-    entities.push_back(base_level);
+    enemy_small_tower1=player_small_tower1;
+    enemy_small_tower1.setPosition({2,0,-9});
+    enemy_small_tower1.setTag("enemy_tower");
+
+    enemy_small_tower2=player_small_tower1;
+    enemy_small_tower2.setPosition({-2,0,-9});
+    enemy_small_tower2.setTag("enemy_tower");
+
+    starlight::World::entities.push_back(player_small_tower1);
+    starlight::World::entities.push_back(player_small_tower2);
+    starlight::World::entities.push_back(enemy_small_tower1);
+    starlight::World::entities.push_back(enemy_small_tower2);
+    starlight::World::entities.push_back(base_level);
 
     shader= static_cast<const std::shared_ptr<starlight::StaticShader>>(new starlight::StaticShader(VERTEX_FILE,
                                                                                                     FRAGMENT_FILE));
@@ -129,19 +132,14 @@ int load(){
 
 int update(){
 
-    // (Your code calls glfwPollEvents())
-// ...
-// Start the Dear ImGui frame
 
-    for(auto entity: entities){
-        if(entity.tag=="enemy_tower"){
+    for(auto &entity: starlight::World::entities){
+        if(entity.getTag()=="enemy_tower"){
             fmt::println("Enemy tower: {}",glm::to_string(entity.getPosition()));
         }
     }
-    // Rendering
-// (Your code clears your framebuffer, renders your other stuff etc.)
 
-// (Your code calls glfwSwapBuffers() etc.)
+    editor.update();
 
     return true;
 }
@@ -153,59 +151,13 @@ int render(){
     shader->loadViewMatrix(camera);
     shader->loadLight(light);
 
-    for(auto entity: entities){
+    for(auto entity: starlight::World::entities){
         renderer.draw(entity,*shader);
     }
 
     shader->stop();
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::CreateContext();
-
-    ImGui::NewFrame();
-
-    {
-        ImGuiIO& io = ImGui::GetIO();
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
-
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
-
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::End();
-    }
-
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    editor.render();
     return true;
 }
 
