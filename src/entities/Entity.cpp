@@ -5,7 +5,8 @@
 #include "Entity.h"
 
 namespace starlight {
-    Entity::Entity(Model &model, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) {
+    Entity::Entity(Model &model, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale,std::string tag) {
+        this->tag=tag;
         this->model=model;
         this->position=position;
         this->rotation=rotation;

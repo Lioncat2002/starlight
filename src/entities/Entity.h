@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <string>
 #include "models/Model.h"
 #include "vec3.hpp"
 
@@ -16,7 +17,8 @@ namespace starlight {
         glm::vec3 rotation{};
         glm::vec3 scale;
     public:
-        Entity(Model &model,glm::vec3 position,glm::vec3 rotation, glm::vec3 scale);
+        std::string tag;
+        Entity(Model &model,glm::vec3 position,glm::vec3 rotation, glm::vec3 scale,std::string tag);
         void increasePosition(glm::vec3 position);
         void increaseRotation(glm::vec3 rotation);
 

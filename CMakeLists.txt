@@ -19,6 +19,8 @@ file(GLOB_RECURSE HEADER_FILES
 # Configure assets header file
 configure_file(src/helpers/RootDir.h.in src/helpers/RootDir.h)
 include_directories(${CMAKE_BINARY_DIR}/src)
+
+file(GLOB IMGUI_SOURCES imgui/*.cpp imgui/*.h)
 	
 # Define the executable
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
@@ -28,9 +30,7 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/models/RawModel.h
 		src/renderer/Loader.cpp
 		src/renderer/Loader.h
-        src/renderer/Loader.h
 		src/renderer/Renderer.cpp
-		src/renderer/Renderer.h
 		src/renderer/Renderer.h
 		src/utils/Math.cpp
 		src/utils/Math.h
@@ -40,19 +40,21 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/models/Model.h
         src/shaders/ShaderProgram.cpp
         src/shaders/ShaderProgram.h
-		src/shaders/ShaderProgram.h
 		src/shaders/StaticShader.cpp
-		src/shaders/StaticShader.h
 		src/shaders/StaticShader.h
 		src/entities/Camera.cpp
 		src/entities/Camera.h
-		src/entities/Camera.h
 		src/entities/Entity.cpp
-		src/entities/Entity.h
 		src/entities/Entity.h
 		src/entities/Lighting.cpp
 		src/entities/Lighting.h
-		src/entities/Lighting.h)
+		src/utils/LogUtils.cpp
+		src/utils/LogUtils.h
+		${IMGUI_SOURCES}
+		imgui/backends/imgui_impl_glfw.cpp
+		imgui/backends/imgui_impl_glfw.h
+		imgui/backends/imgui_impl_opengl3.cpp
+		imgui/backends/imgui_impl_opengl3.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
