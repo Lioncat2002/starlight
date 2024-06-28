@@ -17,7 +17,7 @@ file(GLOB_RECURSE HEADER_FILES
 	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 # Configure assets header file
-configure_file(src/helpers/RootDir.h.in src/helpers/RootDir.h)
+configure_file(src/engine/helpers/RootDir.h.in src/engine/helpers/RootDir.h)
 include_directories(${CMAKE_BINARY_DIR}/src)
 
 file(GLOB IMGUI_SOURCES imgui/*.cpp imgui/*.h)
@@ -26,41 +26,48 @@ file(GLOB IMGUI_SOURCES imgui/*.cpp imgui/*.h)
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
 		src/starlight.h
 		src/starlight.h
-		src/models/RawModel.cpp
-		src/models/RawModel.h
-		src/renderer/Loader.cpp
-		src/renderer/Loader.h
-		src/renderer/Renderer.cpp
-		src/renderer/Renderer.h
-		src/utils/Math.cpp
-		src/utils/Math.h
-		src/textures/Texture.cpp
-		src/textures/Texture.h
-		src/models/Model.cpp
-		src/models/Model.h
-        src/shaders/ShaderProgram.cpp
-        src/shaders/ShaderProgram.h
-		src/shaders/StaticShader.cpp
-		src/shaders/StaticShader.h
-		src/entities/Camera.cpp
-		src/entities/Camera.h
-		src/entities/Entity.cpp
-		src/entities/Entity.h
-		src/entities/Lighting.cpp
-		src/entities/Lighting.h
-		src/utils/LogUtils.cpp
-		src/utils/LogUtils.h
+        src/engine/models/RawModel.cpp
+        src/engine/models/RawModel.h
+        src/engine/renderer/Loader.cpp
+        src/engine/renderer/Loader.h
+        src/engine/renderer/Renderer.cpp
+        src/engine/renderer/Renderer.h
+        src/engine/utils/Math.cpp
+        src/engine/utils/Math.h
+        src/engine/textures/Texture.cpp
+        src/engine/textures/Texture.h
+        src/engine/models/Model.cpp
+        src/engine/models/Model.h
+        src/engine/shaders/ShaderProgram.cpp
+        src/engine/shaders/ShaderProgram.h
+        src/engine/shaders/StaticShader.cpp
+        src/engine/shaders/StaticShader.h
+        src/engine/entities/Camera.cpp
+        src/engine/entities/Camera.h
+        src/engine/entities/Entity.cpp
+        src/engine/entities/Entity.h
+        src/engine/entities/Lighting.cpp
+        src/engine/entities/Lighting.h
+        src/engine/utils/LogUtils.cpp
+        src/engine/utils/LogUtils.h
 		${IMGUI_SOURCES}
 		imgui/backends/imgui_impl_glfw.cpp
 		imgui/backends/imgui_impl_glfw.h
 		imgui/backends/imgui_impl_opengl3.cpp
 		imgui/backends/imgui_impl_opengl3.h
-        src/editor/Editor.cpp
-        src/editor/Editor.h
-		src/utils/AssetServer.cpp
-		src/utils/AssetServer.h
-        src/utils/ECS.cpp
-        src/utils/ECS.h)
+        src/engine/editor/Editor.cpp
+        src/engine/editor/Editor.h
+        src/engine/utils/AssetServer.cpp
+        src/engine/utils/AssetServer.h
+        src/engine/utils/ECS.cpp
+        src/engine/utils/ECS.h
+		src/engine/engine.cpp
+		src/engine/engine.h
+		src/engine/engine.h
+        src/game/barbarian/Attack.cpp
+        src/game/barbarian/Attack.h
+		src/game/barbarian/Barbarian.cpp
+		src/game/barbarian/Barbarian.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

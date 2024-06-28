@@ -1,12 +1,14 @@
 #include "glad.h"
 #include "GLFW/glfw3.h"
 #include "starlight.h"
+
 GLFWwindow *window;
 
 const int WINDOW_WIDTH=1024;
 const int WINDOW_HEIGHT=768;
 
 starlight::Editor editor;
+starlight::Engine engine;
 
 
 starlight::Loader loader;
@@ -28,59 +30,16 @@ starlight::Entity player_small_tower2;
 starlight::Entity enemy_small_tower1;
 starlight::Entity enemy_small_tower2;
 
+starlight::Entity barbarian;
 
-void key_callback(GLFWwindow* window1, int key, int scancode, int action, int mods)
-{
-    if(action==GLFW_PRESS && key==GLFW_KEY_ESCAPE)
-        glfwSetWindowShouldClose(window1,true);
-    //if (action == GLFW_PRESS)
-    //camera.move(key);
-    
-}
+float lastFrame = 0.0f;
 
 int init(){
-    if(!glfwInit())
-        return -1;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
-#ifdef _DEBUG
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-#endif
-
-    window= glfwCreateWindow(WINDOW_WIDTH,WINDOW_HEIGHT,"game", nullptr, nullptr);
-
-    if(!window){
-        fmt::println("failed to create window");
-        glfwTerminate();
-
+    auto ok=engine.init(&window,WINDOW_WIDTH,WINDOW_HEIGHT);
+    if(!ok){
+        fmt::println("Something went wrong");
         return false;
     }
-
-    glfwMakeContextCurrent(window);
-
-    if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)){
-        fmt::println("failed to initialize GLAD");
-        return false;
-    }
-
-#ifdef _DEBUG
-    int flags;
-    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
-    {
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        glDebugMessageCallback(starlight::LogUtils::glDebugOutput, nullptr);
-        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
-    }
-#endif
-    //glClearColor(0.6f,0.8f,1.0f,1.0f);
-    glViewport(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
-    glEnable(GL_DEPTH_TEST);
-    glfwSetKeyCallback(window,key_callback);
-
     editor.init(window);
     return true;
 }
@@ -99,30 +58,46 @@ int load(){
     base_level.setPosition({0,0,-5});
     base_level.setScale({2,2,2});
     base_level.setTag("ground");
+    base_level.id=0;
 
     player_small_tower1=starlight::AssetServer::AssetLoader(loader,
                                                             "res/models/clash_royale_small_tower.obj",
                                                             "res/models/clash_royale_small_tower.png");
     player_small_tower1.setPosition({2,0,1});
     player_small_tower1.setTag("player_tower");
+    player_small_tower1.id=1;
 
     player_small_tower2=player_small_tower1;
     player_small_tower2.setPosition({-2,0,1});
     player_small_tower2.setTag("player_tower");
+    player_small_tower2.id=2;
 
     enemy_small_tower1=player_small_tower1;
     enemy_small_tower1.setPosition({2,0,-9});
     enemy_small_tower1.setTag("enemy_tower");
+    enemy_small_tower1.data["health"]=10;
+    enemy_small_tower1.id=3;
 
     enemy_small_tower2=player_small_tower1;
     enemy_small_tower2.setPosition({-2,0,-9});
     enemy_small_tower2.setTag("enemy_tower");
+    enemy_small_tower2.data["health"]=10;
+    enemy_small_tower2.id=4;
+
+    barbarian=starlight::AssetServer::AssetLoader(loader,
+                                                  "res/models/clash_royale_wip_barbarian.obj",
+                                                  "res/models/clash_royale_wip_barbarian.png");
+    barbarian.setPosition({2,0,-1});
+    barbarian.setTag("barbarian");
+    barbarian.data["health"]=20;
+    barbarian.id=5;
 
     starlight::World::entities.push_back(player_small_tower1);
     starlight::World::entities.push_back(player_small_tower2);
     starlight::World::entities.push_back(enemy_small_tower1);
     starlight::World::entities.push_back(enemy_small_tower2);
     starlight::World::entities.push_back(base_level);
+    starlight::World::entities.push_back(barbarian);
 
     shader= static_cast<const std::shared_ptr<starlight::StaticShader>>(new starlight::StaticShader(VERTEX_FILE,
                                                                                                     FRAGMENT_FILE));
@@ -130,13 +105,44 @@ int load(){
     return true;
 }
 
+int c=0;
+
 int update(){
+    float currentFrame = glfwGetTime();
+    float deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+    starlight::Entity *tower=nullptr;
+    bool found=false;
+    for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
 
-
-    for(auto &entity: starlight::World::entities){
-        if(entity.getTag()=="enemy_tower"){
-            fmt::println("Enemy tower: {}",glm::to_string(entity.getPosition()));
+        if(entity->getTag()=="enemy_tower" && !found){
+            tower=&(*entity);
+            found=true;
         }
+        //utter bs code,
+        //TODO: better modularized solution
+        if(entity->getTag()=="barbarian" && tower!=nullptr){
+            if(glm::distance(tower->getPosition(),entity->getPosition())>2){
+                entity->position=starlight::Math::moveTowards(entity->getPosition(),tower->getPosition(),deltaTime,2);
+            }else{
+                if(c<5/deltaTime){
+                    c+=1;
+                }else{
+                    entity->data["health"]-=2;
+                    tower->data["health"]-=4;
+                    c=0;
+                    fmt::println("Barbarian health: {} Tower health: {}",entity->data["health"],tower->data["health"]);
+                    if(tower->data["health"]<=0){
+                        auto new_end = std::remove(starlight::World::entities.begin(), starlight::World::entities.end(), *tower);
+                        entity=starlight::World::entities.erase(new_end, starlight::World::entities.end());
+
+                        break;
+                    }
+                }
+            }
+
+        }
+        entity++;
     }
 
     editor.update();
