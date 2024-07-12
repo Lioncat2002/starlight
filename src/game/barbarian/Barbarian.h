@@ -5,8 +5,35 @@
 namespace game {
 
     class Barbarian:public starlight::Entity {
-        public:
-        int health=0;
+    private:
+        starlight::Model model;
+        glm::vec3 position{};
+        glm::vec3 rotation{};
+        glm::vec3 scale{};
+        std::string tag;
+        int id;
+        int health;
+    public:
+        std::string getTag() override;
+        int getId() override;
+
+        void increasePosition(glm::vec3 position) override;
+        void increaseRotation(glm::vec3 rotation) override;
+
+        //getters
+        starlight::Model getModel() override;
+        glm::vec3 getPosition() override;
+        glm::vec3 getRotation() override;
+        glm::vec3 getScale() override;
+
+        //setters
+        void setModel(starlight::Model &model) override;
+        void setPosition(glm::vec3 position) override;
+        void setRotation(glm::vec3 rotation) override;
+        void setScale(glm::vec3 scale) override;
+        void setTag(std::string tag) override;
+        //operator overloading
+        bool operator==(const Entity &other) const override;
     };
 
 } // starlight

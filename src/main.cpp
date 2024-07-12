@@ -1,6 +1,7 @@
 #include "glad.h"
 #include "GLFW/glfw3.h"
 #include "starlight.h"
+#include "game/barbarian/Barbarian.h"
 
 GLFWwindow *window;
 
@@ -24,8 +25,8 @@ starlight::Camera camera;
 
 starlight::Entity base_level;
 
-starlight::Entity player_small_tower1;
-starlight::Entity player_small_tower2;
+game::Barbarian player_small_tower1;
+game::Barbarian player_small_tower2;
 
 starlight::Entity enemy_small_tower1;
 starlight::Entity enemy_small_tower2;
