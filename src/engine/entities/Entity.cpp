@@ -6,6 +6,5 @@
 
 namespace starlight {
 
-    Entity::Entity() =default;
 
 } // starlight

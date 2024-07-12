@@ -31,7 +31,7 @@ game::Barbarian player_small_tower2;
 /*starlight::Entity enemy_small_tower1;
 starlight::Entity enemy_small_tower2;*/
 
-std::unique_ptr<starlight::Entity> barbarian;
+game::Barbarian *barbarian;
 
 float lastFrame = 0.0f;
 
@@ -85,14 +85,14 @@ int load(){
     enemy_small_tower2.data["health"]=10;
     enemy_small_tower2.id=4;
      */
-
-   barbarian=starlight::AssetServer<game::Barbarian>::AssetLoader(loader,
+    barbarian=new game::Barbarian();
+   *barbarian=starlight::AssetServer<game::Barbarian>::AssetLoader(loader,
                                                   "res/models/clash_royale_wip_barbarian.obj",
                                                   "res/models/clash_royale_wip_barbarian.png");
-    barbarian->setPosition({2,0,-1});
+    barbarian->setPosition({0,0,0});
     barbarian->setTag("barbarian");
     barbarian->setId(1);
-
+    starlight::World::entities.push_back(barbarian);
     /*starlight::World::entities.push_back(player_small_tower1);
     starlight::World::entities.push_back(player_small_tower2);
     starlight::World::entities.push_back(enemy_small_tower1);
@@ -157,10 +157,10 @@ int render(){
     shader->loadViewMatrix(camera);
     shader->loadLight(light);
 
-    //for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
-     fmt::println("{}",barbarian->getId());
-        renderer.draw(*barbarian,*shader);
-    //}
+    for(auto entity:starlight::World::entities){
+     //fmt::println("{}",barbarian->getId());
+        renderer.draw(entity,*shader);
+    }
 
     shader->stop();
 

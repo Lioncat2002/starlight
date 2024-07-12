@@ -17,7 +17,7 @@ namespace starlight {
         Renderer(StaticShader &shader);
 
         void init();
-        void draw(Entity &entity,StaticShader &shader);
+        void draw(Entity *entity, StaticShader &shader);
 
         Renderer();
 

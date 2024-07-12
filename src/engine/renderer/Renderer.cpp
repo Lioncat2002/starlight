@@ -6,6 +6,7 @@
 #include "glad.h"
 #include "gtc/matrix_transform.hpp"
 #include "engine/utils/Math.h"
+#include "fmt/core.h"
 
 namespace starlight {
     Renderer::Renderer(StaticShader &shader) {
@@ -23,15 +24,15 @@ namespace starlight {
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::draw(Entity &entity, StaticShader &shader) {
-        Model model=entity.getModel();
+    void Renderer::draw(Entity *entity, StaticShader &shader) {
+        Model model=entity->getModel();
         RawModel rawModel=model.getRawModel();
 
         glBindVertexArray(rawModel.getVaoId());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
-        glm::mat4 transformationMatrix=Math::createTransformationMatrix(entity.getPosition(),entity.getRotation(),entity.getScale());
+        glm::mat4 transformationMatrix=Math::createTransformationMatrix(entity->getPosition(),entity->getRotation(),entity->getScale());
         shader.loadTransformationMatrix(transformationMatrix);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,model.getTexture().getId());

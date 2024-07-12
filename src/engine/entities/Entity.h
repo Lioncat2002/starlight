@@ -35,8 +35,6 @@ namespace starlight {
         virtual void setId(int id)=0;
         //operator overloading
         virtual bool operator==(const Entity& other) const=0;
-
-        Entity();
     };
 
 } // starlight
