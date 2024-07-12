@@ -2,6 +2,7 @@
 #include "GLFW/glfw3.h"
 #include "starlight.h"
 #include "game/barbarian/Barbarian.h"
+#include "game/base_level/BaseLevel.h"
 
 GLFWwindow *window;
 
@@ -23,13 +24,13 @@ const std::string FRAGMENT_FILE="res/shaders/Basic.frag";
 
 starlight::Camera camera;
 
-/*starlight::Entity base_level;*/
-
+game::BaseLevel *base_level;
+/*
 game::Barbarian player_small_tower1;
 game::Barbarian player_small_tower2;
 
-/*starlight::Entity enemy_small_tower1;
-starlight::Entity enemy_small_tower2;*/
+starlight::IEntity enemy_small_tower1;
+starlight::IEntity enemy_small_tower2;*/
 
 game::Barbarian *barbarian;
 
@@ -51,16 +52,17 @@ int load(){
 
     light=starlight::Light({-2,4,-3},{1,1,1});
 
-
-    /*base_level=starlight::AssetServer<game::Barbarian>::AssetLoader(loader,
+    base_level=new game::BaseLevel();
+    *base_level=starlight::AssetServer<game::BaseLevel>::AssetLoader(loader,
                                                    "res/models/clash_royale_base_level.obj",
                                                    "res/models/clash_royale_base_level.png");
 
-    base_level.setPosition({0,0,-5});
-    base_level.setScale({2,2,2});
-    base_level.setTag("ground");
-    base_level.id=0;
-
+    base_level->setPosition({0,0,-5});
+    base_level->setScale({2,2,2});
+    base_level->setTag("ground");
+    base_level->setId(0);
+    starlight::World::entities.push_back(base_level);
+/*
     player_small_tower1=starlight::AssetServer::AssetLoader(loader,
                                                             "res/models/clash_royale_small_tower.obj",
                                                             "res/models/clash_royale_small_tower.png");
@@ -111,7 +113,7 @@ int update(){
     float currentFrame = glfwGetTime();
     float deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-    //starlight::Entity *tower=nullptr;
+    //starlight::IEntity *tower=nullptr;
     bool found=false;
     /*for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
 
@@ -190,5 +192,6 @@ int main(){
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     glfwTerminate();
+    delete barbarian;
     return 0;
 }

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "engine/entities/Entity.h"
+#include "engine/entities/IEntity.h"
 
 namespace game {
 
-    class Barbarian:public starlight::Entity {
+    class Barbarian:public starlight::IEntity {
     private:
         starlight::Model model;
         glm::vec3 position{};
@@ -35,7 +35,7 @@ namespace game {
         void setTag(std::string tag) override;
         void setId(int id) override;
         //operator overloading
-        bool operator==(const Entity &other) const override;
+        bool operator==(const IEntity &other) const override;
 
         Barbarian()=default;
         Barbarian(starlight::Model model,glm::vec3 position,glm::vec3 rotation,glm::vec3 scale,std::string tag);

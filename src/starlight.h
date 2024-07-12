@@ -5,7 +5,7 @@
 #include "engine/shaders/StaticShader.h"
 #include "engine/textures/Texture.h"
 #include "engine/models/Model.h"
-#include "engine/entities/Entity.h"
+#include "engine/entities/IEntity.h"
 #include "engine/entities/Lighting.h"
 #include "engine/utils/LogUtils.h"
 #include "engine/utils/AssetServer.h"

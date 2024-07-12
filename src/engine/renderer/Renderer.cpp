@@ -6,7 +6,6 @@
 #include "glad.h"
 #include "gtc/matrix_transform.hpp"
 #include "engine/utils/Math.h"
-#include "fmt/core.h"
 
 namespace starlight {
     Renderer::Renderer(StaticShader &shader) {
@@ -23,8 +22,8 @@ namespace starlight {
         glClearColor(0.6784f, 0.8f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     }
-
-    void Renderer::draw(Entity *entity, StaticShader &shader) {
+    //idk why but the renderer doesn't draw if I pass a statis shader by value?
+    void Renderer::draw(IEntity *entity, StaticShader &shader) {
         Model model=entity->getModel();
         RawModel rawModel=model.getRawModel();
 

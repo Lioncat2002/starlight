@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
-#include "engine/entities/Entity.h"
+#include "engine/entities/IEntity.h"
 
 namespace starlight {
 
     class World {
     public:
-        static std::vector<Entity*> entities;
+        static std::vector<IEntity*> entities;
     };
 
 } // starlight

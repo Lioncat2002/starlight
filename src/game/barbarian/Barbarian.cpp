@@ -30,7 +30,7 @@ namespace game {
         this->id=id;
     }
 
-    bool Barbarian::operator==(const starlight::Entity &other) const {
+    bool Barbarian::operator==(const starlight::IEntity &other) const {
         return this->id==other.getId();
     }
 

@@ -44,8 +44,8 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
         src/engine/shaders/StaticShader.h
         src/engine/entities/Camera.cpp
         src/engine/entities/Camera.h
-        src/engine/entities/Entity.cpp
-        src/engine/entities/Entity.h
+		src/engine/entities/IEntity.cpp
+		src/engine/entities/IEntity.h
         src/engine/entities/Lighting.cpp
         src/engine/entities/Lighting.h
         src/engine/utils/LogUtils.cpp
@@ -67,7 +67,10 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES}
         src/game/barbarian/Attack.cpp
         src/game/barbarian/Attack.h
 		src/game/barbarian/Barbarian.cpp
-		src/game/barbarian/Barbarian.h)
+		src/game/barbarian/Barbarian.h
+        src/game/base_level/BaseLevel.cpp
+        src/game/base_level/BaseLevel.h
+		src/game/base_level/BaseLevel.h)
 
 # We need a CMAKE_DIR with some code to find external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")

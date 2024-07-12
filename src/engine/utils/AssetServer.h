@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/entities/Entity.h"
+#include "engine/entities/IEntity.h"
 #include "engine/renderer/Loader.h"
 namespace starlight {
 
