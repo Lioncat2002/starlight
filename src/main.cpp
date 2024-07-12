@@ -1,4 +1,4 @@
-#include "glad.h"
+#include <glad/glad.h>
 #include "GLFW/glfw3.h"
 #include "starlight.h"
 #include "game/barbarian/Barbarian.h"
@@ -23,15 +23,15 @@ const std::string FRAGMENT_FILE="res/shaders/Basic.frag";
 
 starlight::Camera camera;
 
-starlight::Entity base_level;
+/*starlight::Entity base_level;*/
 
 game::Barbarian player_small_tower1;
 game::Barbarian player_small_tower2;
 
-starlight::Entity enemy_small_tower1;
-starlight::Entity enemy_small_tower2;
+/*starlight::Entity enemy_small_tower1;
+starlight::Entity enemy_small_tower2;*/
 
-starlight::Entity barbarian;
+std::unique_ptr<starlight::Entity> barbarian;
 
 float lastFrame = 0.0f;
 
@@ -52,7 +52,7 @@ int load(){
     light=starlight::Light({-2,4,-3},{1,1,1});
 
 
-    base_level=starlight::AssetServer::AssetLoader(loader,
+    /*base_level=starlight::AssetServer<game::Barbarian>::AssetLoader(loader,
                                                    "res/models/clash_royale_base_level.obj",
                                                    "res/models/clash_royale_base_level.png");
 
@@ -84,21 +84,20 @@ int load(){
     enemy_small_tower2.setTag("enemy_tower");
     enemy_small_tower2.data["health"]=10;
     enemy_small_tower2.id=4;
+     */
 
-    barbarian=starlight::AssetServer::AssetLoader(loader,
+   barbarian=starlight::AssetServer<game::Barbarian>::AssetLoader(loader,
                                                   "res/models/clash_royale_wip_barbarian.obj",
                                                   "res/models/clash_royale_wip_barbarian.png");
-    barbarian.setPosition({2,0,-1});
-    barbarian.setTag("barbarian");
-    barbarian.data["health"]=20;
-    barbarian.id=5;
+    barbarian->setPosition({2,0,-1});
+    barbarian->setTag("barbarian");
+    barbarian->setId(1);
 
-    starlight::World::entities.push_back(player_small_tower1);
+    /*starlight::World::entities.push_back(player_small_tower1);
     starlight::World::entities.push_back(player_small_tower2);
     starlight::World::entities.push_back(enemy_small_tower1);
     starlight::World::entities.push_back(enemy_small_tower2);
-    starlight::World::entities.push_back(base_level);
-    starlight::World::entities.push_back(barbarian);
+    starlight::World::entities.push_back(base_level);*/
 
     shader= static_cast<const std::shared_ptr<starlight::StaticShader>>(new starlight::StaticShader(VERTEX_FILE,
                                                                                                     FRAGMENT_FILE));
@@ -112,9 +111,9 @@ int update(){
     float currentFrame = glfwGetTime();
     float deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
-    starlight::Entity *tower=nullptr;
+    //starlight::Entity *tower=nullptr;
     bool found=false;
-    for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
+    /*for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
 
         if(entity->getTag()=="enemy_tower" && !found){
             tower=&(*entity);
@@ -122,7 +121,7 @@ int update(){
         }
         //utter bs code,
         //TODO: better modularized solution
-        if(entity->getTag()=="barbarian" && tower!=nullptr){
+        if(entity->get()->getTag()=="barbarian" && tower!=nullptr){
             if(glm::distance(tower->getPosition(),entity->getPosition())>2){
                 entity->position=starlight::Math::moveTowards(entity->getPosition(),tower->getPosition(),deltaTime,2);
             }else{
@@ -145,7 +144,7 @@ int update(){
         }
         entity++;
     }
-
+*/
     editor.update();
 
     return true;
@@ -158,9 +157,10 @@ int render(){
     shader->loadViewMatrix(camera);
     shader->loadLight(light);
 
-    for(auto entity: starlight::World::entities){
-        renderer.draw(entity,*shader);
-    }
+    //for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
+     fmt::println("{}",barbarian->getId());
+        renderer.draw(*barbarian,*shader);
+    //}
 
     shader->stop();
 

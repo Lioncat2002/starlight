@@ -34,12 +34,12 @@ namespace starlight {
         {
             ImGui::Begin("Inspector");
 
-            for(auto &entity: starlight::World::entities){
-                if(ImGui::TreeNode(fmt::format("tag: {} id: {}",entity.getTag(),entity.id).c_str())){
-                    ImGui::SliderFloat3("Position",&entity.position[0],-10,10);
-                    ImGui::SliderFloat3("Rotation",&entity.rotation[0],-360,360);
-                    ImGui::SliderFloat3("Scale",&entity.scale[0],0,100);
-                    ImGui::Text("Health: %d",entity.data["health"]);
+            for(auto entity=starlight::World::entities.begin();entity!=starlight::World::entities.end();){
+                if(ImGui::TreeNode(fmt::format("tag: {} id: {}",entity->get()->getTag(),entity->get()->getId()).c_str())){
+                    ImGui::SliderFloat3("Position",&entity->get()->getPosition()[0],-10,10);
+                    ImGui::SliderFloat3("Rotation",&entity->get()->getRotation()[0],-360,360);
+                    ImGui::SliderFloat3("Scale",&entity->get()->getScale()[0],0,100);
+                    //ImGui::Text("Health: %d",entity.data["health"]);
                     ImGui::TreePop();
 
                 }

@@ -6,7 +6,7 @@ namespace starlight {
 
     class World {
     public:
-        static std::vector<Entity> entities;
+        static std::vector<std::unique_ptr<Entity>> entities;
     };
 
 } // starlight

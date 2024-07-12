@@ -14,16 +14,9 @@ namespace starlight {
 
     class Entity {
     private:
-        //Model model;
     public:
-        //glm::vec3 position{};
-        //glm::vec3 rotation{};
-        //glm::vec3 scale;
-        //std::string tag;
-        //std::unordered_map<std::string,int> data;
-        //int id;
         virtual std::string getTag()=0;
-        virtual int getId()=0;
+        virtual int getId() const=0;
         //Entity(Model &model,glm::vec3 position,glm::vec3 rotation, glm::vec3 scale,std::string tag);
         virtual void increasePosition(glm::vec3 position)=0;
         virtual void increaseRotation(glm::vec3 rotation)=0;
@@ -39,6 +32,7 @@ namespace starlight {
         virtual void setRotation(glm::vec3 rotation)=0;
         virtual void setScale(glm::vec3 scale)=0;
         virtual void setTag(std::string tag)=0;
+        virtual void setId(int id)=0;
         //operator overloading
         virtual bool operator==(const Entity& other) const=0;
 

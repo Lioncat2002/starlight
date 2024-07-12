@@ -19,34 +19,38 @@ namespace game {
     }
 
     void Barbarian::setScale(glm::vec3 scale) {
-        return void();
+        this->scale=scale;
     }
 
     void Barbarian::setTag(std::string tag) {
-        return void();
+        this->tag=tag;
+    }
+
+    void Barbarian::setId(int id) {
+        this->id=id;
     }
 
     bool Barbarian::operator==(const starlight::Entity &other) const {
-        return false;
+        return this->id==other.getId();
     }
 
     glm::vec3 Barbarian::getScale() {
-        return glm::vec3();
+        return this->scale;
     }
 
     glm::vec3 Barbarian::getRotation() {
-        return glm::vec3();
+        return this->rotation;
     }
 
     glm::vec3 Barbarian::getPosition() {
-        return glm::vec3();
+        return this->position;
     }
 
     starlight::Model Barbarian::getModel() {
-        return starlight::Model();
+        return this->model;
     }
 
-    int Barbarian::getId() {
+    int Barbarian::getId() const {
         return this->id;
     }
 
@@ -59,6 +63,16 @@ namespace game {
     }
 
     void Barbarian::increasePosition(glm::vec3 position) {
+
+    }
+
+    Barbarian::Barbarian(starlight::Model model, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale,
+                         std::string tag) {
+        this->model=model;
+        this->position=position;
+        this->rotation=rotation;
+        this->scale=scale;
+        this->tag=tag;
 
     }
 
