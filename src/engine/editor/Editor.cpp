@@ -28,7 +28,6 @@ namespace starlight {
     int Editor::render() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
-        ImGui::CreateContext();
         ImGui::NewFrame();
 
         {
@@ -82,6 +81,7 @@ namespace starlight {
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         return true;
     }
 
